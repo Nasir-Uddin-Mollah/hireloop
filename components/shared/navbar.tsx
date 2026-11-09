@@ -22,7 +22,7 @@ export function Navbar() {
     href === "/" ? pathname === "/" : pathname.startsWith(href)
 
   return (
-    <header className="absolute inset-x-0 top-0 z-50 bg-[#1e1e1e]">
+    <header className="fixed inset-x-0 top-0 z-50 bg-[#1e1e1e]">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex shrink-0 items-center">
           <Image
@@ -54,14 +54,14 @@ export function Navbar() {
           <span className="mx-2 h-4 w-px bg-neutral-700" />
 
           <Link
-            href="/sign-in"
+            href="/signin"
             className="rounded-lg px-3 py-1.5 text-sm font-medium text-indigo-400 transition-colors hover:text-indigo-300"
           >
             Sign In
           </Link>
 
           <Link
-            href="/sign-up"
+            href="/signup"
             className="ml-1 inline-flex h-9 items-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white shadow-md shadow-indigo-900/40 transition-colors hover:bg-indigo-500"
           >
             Get Started
@@ -101,7 +101,7 @@ export function Navbar() {
             <span className="my-2 h-px w-full bg-neutral-800" />
 
             <Link
-              href="/sign-in"
+              href="/signin"
               onClick={() => setOpen(false)}
               className="rounded-lg px-3 py-2.5 text-sm font-medium text-indigo-400 transition-colors hover:text-indigo-300"
             >
@@ -109,7 +109,7 @@ export function Navbar() {
             </Link>
 
             <Link
-              href="/sign-up"
+              href="/signup"
               onClick={() => setOpen(false)}
               className="inline-flex h-10 items-center justify-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white transition-colors hover:bg-indigo-500"
             >

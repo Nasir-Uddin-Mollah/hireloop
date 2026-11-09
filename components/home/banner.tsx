@@ -49,7 +49,6 @@ export function Banner() {
 
   return (
     <section className="relative isolate min-h-screen overflow-hidden bg-[#07060a] text-white">
-      {/* Globe illustration background */}
       <div className="pointer-events-none absolute inset-x-0 top-0 bottom-0 z-0 flex items-start justify-center overflow-hidden">
         <Image
           src={globe}
@@ -59,12 +58,9 @@ export function Banner() {
         />
       </div>
 
-      {/* Top gradient mask – covers the magenta fringe at the top of globe.png */}
       <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-80 bg-gradient-to-b from-[#07060a] via-[#07060a]/95 to-transparent" />
 
-      {/* Content wrapper – pt accounts for the absolute-positioned navbar (~56px) */}
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-4 pt-24 pb-16 sm:px-6 sm:pt-28 sm:pb-20 lg:px-8 lg:pt-32 lg:pb-24">
-        {/* Top pill badge */}
         <div className="flex items-center gap-3">
           <div className="hidden h-px w-10 bg-gradient-to-r from-transparent to-neutral-700 sm:block sm:w-16" />
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#121118]/80 px-4 py-1.5 shadow-lg backdrop-blur-md">
@@ -79,24 +75,20 @@ export function Banner() {
           <div className="hidden h-px w-10 bg-gradient-to-l from-transparent to-neutral-700 sm:block sm:w-16" />
         </div>
 
-        {/* Main hero heading */}
         <h1 className="mt-6 text-center text-3xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
           Find Your Dream Job Today
         </h1>
 
-        {/* Hero description */}
         <p className="mt-4 max-w-2xl text-center text-sm leading-relaxed text-neutral-400 sm:text-base">
           HireLoop connects top talent with world-class companies. Browse
           thousands of curated opportunities and land your next role – faster.
         </p>
 
-        {/* Search bar form */}
         <form
           onSubmit={handleSearch}
           className="mt-8 w-full max-w-2xl rounded-2xl border border-white/10 bg-[#0d0c13]/85 p-2 shadow-2xl shadow-indigo-950/30 backdrop-blur-xl sm:rounded-full sm:p-2 sm:pr-2 sm:pl-5"
         >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            {/* Role / Title input */}
             <div className="flex flex-1 items-center gap-2.5 px-3 py-1.5 sm:px-0">
               <Search className="size-4 shrink-0 text-neutral-400" />
               <input
@@ -108,10 +100,8 @@ export function Banner() {
               />
             </div>
 
-            {/* Desktop vertical divider */}
             <div className="hidden h-6 w-px shrink-0 bg-neutral-800 sm:block" />
 
-            {/* Location input */}
             <div className="flex flex-1 items-center gap-2.5 border-t border-neutral-800/80 px-3 py-1.5 sm:border-t-0 sm:px-2">
               <MapPin className="size-4 shrink-0 text-neutral-400" />
               <input
@@ -123,7 +113,6 @@ export function Banner() {
               />
             </div>
 
-            {/* Submit button */}
             <Button
               type="submit"
               size="icon"
@@ -135,7 +124,6 @@ export function Banner() {
           </div>
         </form>
 
-        {/* Trending position pills */}
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
           <span className="text-xs text-neutral-400 sm:text-sm">
             Trending Position
@@ -152,7 +140,6 @@ export function Banner() {
           ))}
         </div>
 
-        {/* Mid-banner text over globe horizon */}
         <div className="mt-28 text-center sm:mt-36 md:mt-44 lg:mt-52">
           <h2 className="mx-auto max-w-xl text-xl leading-snug text-neutral-300 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:text-2xl md:text-3xl">
             Assisting over{" "}
@@ -162,7 +149,6 @@ export function Banner() {
           </h2>
         </div>
 
-        {/* 4 Stat Cards */}
         <div className="mt-12 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:mt-16 lg:grid-cols-4 lg:gap-6">
           {stats.map((stat) => {
             const Icon = stat.icon
