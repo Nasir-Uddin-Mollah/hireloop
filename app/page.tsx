@@ -1,8 +1,9 @@
+import { Banner } from "@/components/home/banner"
 
 export default function Page() {
   return (
-    <div className="text-center">
-      HireLoop
-    </div>
+    <main>
+      <Banner />
+    </main>
   )
 }
