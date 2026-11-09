@@ -23,9 +23,10 @@ export default function SignInPage() {
 
     const formData = new FormData(e.currentTarget)
 
-    const { email, password } = Object.fromEntries(
-      formData.entries()
-    ) as { email: string; password: string }
+    const { email, password } = Object.fromEntries(formData.entries()) as {
+      email: string
+      password: string
+    }
 
     try {
       const { error: err } = await authClient.signIn.email({

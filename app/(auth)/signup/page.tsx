@@ -8,10 +8,20 @@ import { useRouter } from "next/navigation"
 import globe from "@/app/images/globe.png"
 import logo from "@/app/images/logo.png"
 import { authClient } from "@/lib/auth-client"
+import { cn } from "@/lib/utils"
+
+const roles = [
+  { id: "seeker", label: "Seeker" },
+  { id: "recruiter", label: "Recruiter" },
+  { id: "admin", label: "Admin" },
+] as const
+
+type Role = (typeof roles)[number]["id"]
 
 export default function SignUpPage() {
   const router = useRouter()
 
+  const [role, setRole] = useState<Role>("seeker")
   const [showPassword, setShowPassword] = useState(false)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState("")
@@ -32,6 +42,7 @@ export default function SignUpPage() {
         name,
         email,
         password,
+        role,
       })
 
       if (err) {
@@ -114,6 +125,29 @@ export default function SignUpPage() {
                 placeholder="john@example.com"
                 className="h-11 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-neutral-500 focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none"
               />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-neutral-300">
+                Join as
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {roles.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setRole(item.id)}
+                    className={cn(
+                      "flex h-11 items-center justify-center rounded-xl border text-sm font-medium transition-all",
+                      role === item.id
+                        ? "border-indigo-500 bg-indigo-600/20 text-white shadow-sm shadow-indigo-500/20"
+                        : "border-white/10 bg-white/5 text-neutral-400 hover:border-white/20 hover:bg-white/[0.08] hover:text-neutral-200"
+                    )}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="flex flex-col gap-1.5">
