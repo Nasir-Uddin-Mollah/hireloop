@@ -22,6 +22,12 @@ Single Next.js 16 App Router app (not a monorepo). `CLAUDE.md` is just `@AGENTS.
 
 **There is no test runner and no CI** (`npm test` does not exist). The only verification gate is local: `npm run format && npm run lint && npm run typecheck`, plus `npm run build` for risky changes. Prettier is not wired into ESLint — run `format` separately.
 
+## Layout
+
+- Root: `app/layout.tsx` (wraps everything in `ThemeProvider` + `Navbar`), `app/page.tsx`, `app/api/auth/[...all]/route.ts`.
+- Feature code: `components/ui/` (shadcn), `components/home/`, `components/shared/`, `lib/`, `hooks/` (currently empty).
+- Static images live in `app/images/` and are imported as `@/app/images/*` — `public/` is empty. Use `next/image`.
+
 ## Next.js 16 specifics
 
 - Docs for this exact version ship in `node_modules/next/dist/docs/` — consult them before using unfamiliar Next APIs (see block above).
@@ -31,7 +37,7 @@ Single Next.js 16 App Router app (not a monorepo). `CLAUDE.md` is just `@AGENTS.
 
 - **shadcn/ui on Base UI**: `components.json` uses style `base-nova` backed by `@base-ui/react`, **not Radix**. Add components with `npx shadcn@latest add <name>`; they land in `components/ui/`.
 - **`cn`** comes from the npm `cn` package, re-exported by `lib/utils.ts` — do not add `clsx`/`tailwind-merge`.
-- **Tailwind v4** via `@tailwindcss/postcss`; no tailwind config file — theming is CSS-first in `app/globals.css`.
+- **Tailwind v4** via `@tailwindcss/postcss`; no tailwind config file — theming is CSS-first in `app/globals.css`, which imports `shadcn/tailwind.css` (why `shadcn` is a runtime dep). Keep that import.
 - **Prettier style**: no semicolons, double quotes, class sorting via `prettier-plugin-tailwindcss` (`cn`/`cva` listed in `tailwindFunctions`). Match it; `npm run format` won't touch `.md`/`.json`.
 
 ## Auth (better-auth + MongoDB) — early-stage WIP
@@ -39,4 +45,5 @@ Single Next.js 16 App Router app (not a monorepo). `CLAUDE.md` is just `@AGENTS.
 - `lib/auth.ts` uses a hardcoded `mongodb://localhost:27017/database` (db `hireloopdb`) — local MongoDB must be running; no env override exists.
 - `.env` (gitignored) provides `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. `lib/auth.ts` also reads `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` for Google sign-in — not set locally, so social login will fail until added.
 - Only `NEXT_PUBLIC_*` vars reach the browser: `process.env.BETTER_AUTH_URL` in `lib/auth-client.ts` is `undefined` client-side. The default origin works in dev.
+- `lib/auth-client.ts` creates **two** client instances: `authClient` (with baseURL) and a separate one that exports `signIn`/`signUp`/`useSession`. Use `authClient.*` for consistency; don't assume the named exports come from `authClient`.
 - Catch-all route handler: `app/api/auth/[...all]/route.ts`.
