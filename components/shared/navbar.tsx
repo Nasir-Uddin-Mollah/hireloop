@@ -9,17 +9,21 @@ import logo from "@/app/images/logo.png"
 import { authClient } from "@/lib/auth-client"
 import { cn } from "@/lib/utils"
 
-const navLinks = [
-  { label: "Browse Jobs", href: "/jobs" },
-  { label: "Company", href: "/company" },
-  { label: "Pricing", href: "/pricing" },
-]
-
 export function Navbar() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
   const { data: session, isPending } = authClient.useSession()
+
+  const navLinks = [
+    { label: "Browse Jobs", href: "/jobs" },
+    { label: "Company", href: "/company" },
+    { label: "Pricing", href: "/pricing" },
+    {
+      label: "Dashboard",
+      href: `/dashboard/${session?.user.role || "seeker"}`,
+    },
+  ]
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href)
