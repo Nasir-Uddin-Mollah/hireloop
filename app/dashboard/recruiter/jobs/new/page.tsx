@@ -17,47 +17,15 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/toast"
 import { Briefcase, Calendar, MapPin } from "lucide-react"
 import { createJob } from "@/lib/actions/jobs"
-
-type JobType = "full-time" | "part-time" | "contract" | "internship"
-
-export type JobFormData = {
-  title: string
-  companyName: string
-  category: string
-  jobType: JobType
-  isRemote: boolean
-  location: string
-  deadline: string
-  minSalary: string
-  maxSalary: string
-  salaryFrequency: string
-  responsibilities: string
-  requirements: string
-}
-
-const JOB_CATEGORIES = [
-  "Engineering & Tech",
-  "Design",
-  "Product",
-  "Marketing",
-  "Infrastructure",
-  "Quality",
-]
-
-const JOB_TYPES: JobType[] = [
-  "full-time",
-  "part-time",
-  "contract",
-  "internship",
-]
-
-const SALARY_FREQUENCIES = [
-  "per hour",
-  "per day",
-  "per week",
-  "per month",
-  "per year",
-]
+import {
+  JOB_CATEGORIES,
+  JOB_TYPES,
+  SALARY_FREQUENCIES,
+  type JobFormData,
+  type JobType,
+} from "@/lib/types/jobs"
+import { useRouter } from "next/navigation"
+export type { JobFormData, JobType }
 
 const inputClass =
   "bg-[#1A1A1F] border-white/10 focus-visible:border-[#5C53FE]/60 focus-visible:ring-[#5C53FE]/30 aria-invalid:border-destructive/60"
@@ -69,6 +37,7 @@ const sectionBulletClass =
   "flex size-7 items-center justify-center rounded-lg bg-[#5C53FE]/15 text-sm font-semibold text-[#8B85FF]"
 
 export default function NewJobPage() {
+  const router = useRouter()
   const [isRemote, setIsRemote] = useState(false)
   const [pending, setPending] = useState(false)
   const [formKey, setFormKey] = useState(0)
@@ -78,8 +47,10 @@ export default function NewJobPage() {
     const formEl = event.currentTarget
     const raw = Object.fromEntries(new FormData(formEl).entries())
     const jobData: JobFormData = {
-      ...(raw as Omit<JobFormData, "isRemote">),
+      ...(raw as unknown as Omit<JobFormData, "isRemote">),
       isRemote: raw.isRemote === "on",
+      applicants: 0,
+      status: "active",
     }
 
     setPending(true)
@@ -103,6 +74,7 @@ export default function NewJobPage() {
         description: "The job has been published.",
         type: "success",
       })
+      router.push("/dashboard/recruiter/jobs")
     } catch {
       toast.add({
         title: "Failed to publish job",

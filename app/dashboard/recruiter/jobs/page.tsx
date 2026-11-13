@@ -2,7 +2,7 @@ import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Eye, Pencil, MoreHorizontal, Plus, Users } from "lucide-react"
-import type { JobFormData } from "@/app/dashboard/recruiter/jobs/new/page"
+import type { JobFormData } from "@/lib/types/jobs"
 import { getJobs } from "@/lib/api/jobs"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
 
