@@ -4,6 +4,7 @@ import { Bookmark } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useSession } from "@/lib/auth-client"
 import { createApplication } from "@/lib/api/applications"
+import { toast } from "@/components/ui/toast"
 import type { ApplicationFormData } from "@/lib/types/applications"
 
 export function JobHeaderCard({ job }: { job: JobRow }) {
@@ -34,13 +35,35 @@ export function JobHeaderCard({ job }: { job: JobRow }) {
         archived: false,
       }
 
-      const result = await createApplication(application)
-      if (result.insertedId) {
-        console.log("Application submitted successfully")
-        router.push("/browse-jobs")
+      try {
+        const result = await createApplication(application)
+        if (result.insertedId) {
+          toast.add({
+            title: "Application submitted",
+            description: "Your application has been submitted successfully.",
+            type: "success",
+          })
+          router.push("/browse-jobs")
+        } else {
+          toast.add({
+            title: "Application failed",
+            description: "Failed to submit application. Please try again.",
+            type: "error",
+          })
+        }
+      } catch {
+        toast.add({
+          title: "Application failed",
+          description: "Something went wrong. Please try again.",
+          type: "error",
+        })
       }
     } else {
-      console.log("user is not a job seeker")
+      toast.add({
+        title: "Access denied",
+        description: "Only job seekers can apply for jobs.",
+        type: "error",
+      })
     }
   }
 
@@ -86,7 +109,7 @@ export function JobHeaderCard({ job }: { job: JobRow }) {
         <button
           type="button"
           onClick={handleApplyNow}
-          className="h-12 rounded-lg bg-[#FAFAFA] px-4 text-base font-medium text-[#0B0B0C] shadow-[0_1px_2px_rgba(0,0,0,0.35)] transition-colors hover:bg-white cursor-pointer"
+          className="h-12 cursor-pointer rounded-lg bg-[#FAFAFA] px-4 text-base font-medium text-[#0B0B0C] shadow-[0_1px_2px_rgba(0,0,0,0.35)] transition-colors hover:bg-white"
         >
           Apply Now
         </button>
