@@ -127,3 +127,15 @@
     @apply font-sans;
     }
 }
+
+.surface-card {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #141418;
+}
+
+.surface-field {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #1a1a1f;
+}
