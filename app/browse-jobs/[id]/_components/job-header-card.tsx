@@ -13,7 +13,7 @@ export function JobHeaderCard({ job }: { job: JobRow }) {
 
   const handleApplyNow = async () => {
     if (!user) {
-      router.push(`/sign-in?redirectTo=/browse-jobs/${job._id}`)
+      router.push(`/signin?redirectTo=/browse-jobs/${job._id}`)
       return
     } else if (user.role === "seeker") {
       const application: ApplicationFormData = {
@@ -86,7 +86,7 @@ export function JobHeaderCard({ job }: { job: JobRow }) {
         <button
           type="button"
           onClick={handleApplyNow}
-          className="h-12 rounded-lg bg-[#FAFAFA] px-4 text-base font-medium text-[#0B0B0C] shadow-[0_1px_2px_rgba(0,0,0,0.35)] transition-colors hover:bg-white"
+          className="h-12 rounded-lg bg-[#FAFAFA] px-4 text-base font-medium text-[#0B0B0C] shadow-[0_1px_2px_rgba(0,0,0,0.35)] transition-colors hover:bg-white cursor-pointer"
         >
           Apply Now
         </button>

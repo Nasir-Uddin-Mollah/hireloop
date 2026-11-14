@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import globe from "@/app/images/globe.png"
 import logo from "@/app/images/logo.png"
 import { authClient } from "@/lib/auth-client"
@@ -18,8 +18,10 @@ const roles = [
 
 type Role = (typeof roles)[number]["id"]
 
-export default function SignUpPage() {
+function SignUpContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirectTo") || "/"
 
   const [role, setRole] = useState<Role>("seeker")
   const [showPassword, setShowPassword] = useState(false)
@@ -50,7 +52,7 @@ export default function SignUpPage() {
         return
       }
 
-      router.push("/")
+      router.push(redirectTo)
     } catch {
       setError("Something went wrong. Please try again.")
     } finally {
@@ -202,7 +204,11 @@ export default function SignUpPage() {
         <p className="mt-6 text-center text-sm text-neutral-400">
           Already have an account?{" "}
           <Link
-            href="/signin"
+            href={
+              redirectTo !== "/"
+                ? `/signin?redirectTo=${encodeURIComponent(redirectTo)}`
+                : "/signin"
+            }
             className="font-medium text-indigo-400 transition-colors hover:text-indigo-300"
           >
             Sign in
@@ -210,5 +216,13 @@ export default function SignUpPage() {
         </p>
       </div>
     </main>
+  )
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense>
+      <SignUpContent />
+    </Suspense>
   )
 }

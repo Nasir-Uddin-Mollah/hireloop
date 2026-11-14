@@ -1,16 +1,18 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import globe from "@/app/images/globe.png"
 import logo from "@/app/images/logo.png"
 import { authClient } from "@/lib/auth-client"
 
-export default function SignInPage() {
+function SignInContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirectTo") || "/"
 
   const [showPassword, setShowPassword] = useState(false)
   const [pending, setPending] = useState(false)
@@ -39,13 +41,18 @@ export default function SignInPage() {
         return
       }
 
-      router.push("/")
+      router.push(redirectTo)
     } catch {
       setError("Something went wrong. Please try again.")
     } finally {
       setPending(false)
     }
   }
+
+  const signupHref =
+    redirectTo !== "/"
+      ? `/signup?redirectTo=${encodeURIComponent(redirectTo)}`
+      : "/signup"
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#07060a] px-4 pt-28 pb-16">
@@ -158,7 +165,7 @@ export default function SignInPage() {
         <p className="mt-6 text-center text-sm text-neutral-400">
           Don&apos;t have an account?{" "}
           <Link
-            href="/signup"
+            href={signupHref}
             className="font-medium text-indigo-400 transition-colors hover:text-indigo-300"
           >
             Create one
@@ -166,5 +173,13 @@ export default function SignInPage() {
         </p>
       </div>
     </main>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInContent />
+    </Suspense>
   )
 }
