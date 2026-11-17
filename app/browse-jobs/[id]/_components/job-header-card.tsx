@@ -6,6 +6,7 @@ import { useSession } from "@/lib/auth-client"
 import { createApplication, getApplicationsCount } from "@/lib/api/applications"
 import { toast } from "@/components/ui/toast"
 import type { ApplicationFormData } from "@/lib/types/applications"
+import { getUserPremiumById } from "@/lib/api/user"
 
 export function JobHeaderCard({ job }: { job: JobRow }) {
   const { data: session } = useSession()
@@ -17,10 +18,11 @@ export function JobHeaderCard({ job }: { job: JobRow }) {
       router.push(`/signin?redirectTo=/browse-jobs/${job._id}`)
       return
     } else if (user.role === "seeker") {
-      const countResult = await getApplicationsCount(`applicantId=${user.id}`)
-      console.log(countResult)
+      const premiumResult = await getUserPremiumById(user.id)
 
-      if (countResult.count >= 2) {
+      const countResult = await getApplicationsCount(`applicantId=${user.id}`)
+
+      if (!premiumResult.premium && countResult.count >= 2) {
         // redirect to the payment page
         router.push("/checkout")
         return
