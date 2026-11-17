@@ -12,6 +12,11 @@ export const getApplications = async (
   return res.json()
 }
 
+export const getApplicationsCount = async (query = ""): Promise<{ count: number }> => {
+    const res = await fetch(`${BASE_URL}/applications/count?${query}`)
+    return res.json()
+}
+
 export const createApplication = async (data: ApplicationFormData) => {
   const res = await fetch(`${BASE_URL}/applications`, {
     method: "POST",

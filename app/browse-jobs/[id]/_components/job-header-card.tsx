@@ -3,7 +3,7 @@ import type { JobRow } from "@/lib/types/jobs"
 import { Bookmark } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useSession } from "@/lib/auth-client"
-import { createApplication } from "@/lib/api/applications"
+import { createApplication, getApplicationsCount } from "@/lib/api/applications"
 import { toast } from "@/components/ui/toast"
 import type { ApplicationFormData } from "@/lib/types/applications"
 
@@ -17,46 +17,55 @@ export function JobHeaderCard({ job }: { job: JobRow }) {
       router.push(`/signin?redirectTo=/browse-jobs/${job._id}`)
       return
     } else if (user.role === "seeker") {
-      const application: ApplicationFormData = {
-        jobId: job._id,
-        userId: user.id,
-        email: user.email,
-        jobTitle: job.title,
-        companyName: job.companyName,
-        jobType: job.jobType,
-        isRemote: job.isRemote,
-        location: job.location,
-        minSalary: job.minSalary,
-        maxSalary: job.maxSalary,
-        salaryFrequency: job.salaryFrequency,
-        deadline: job.deadline,
-        appliedAt: new Date().toISOString(),
-        status: "applied",
-        archived: false,
-      }
+      const countResult = await getApplicationsCount(`applicantId=${user.id}`)
+      console.log(countResult)
 
-      try {
-        const result = await createApplication(application)
-        if (result.insertedId) {
-          toast.add({
-            title: "Application submitted",
-            description: "Your application has been submitted successfully.",
-            type: "success",
-          })
-          router.push("/browse-jobs")
-        } else {
+      if (countResult.count >= 2) {
+        // redirect to the payment page
+        router.push("/checkout")
+        return
+      } else {
+        const application: ApplicationFormData = {
+          jobId: job._id,
+          userId: user.id,
+          email: user.email,
+          jobTitle: job.title,
+          companyName: job.companyName,
+          jobType: job.jobType,
+          isRemote: job.isRemote,
+          location: job.location,
+          minSalary: job.minSalary,
+          maxSalary: job.maxSalary,
+          salaryFrequency: job.salaryFrequency,
+          deadline: job.deadline,
+          appliedAt: new Date().toISOString(),
+          status: "applied",
+          archived: false,
+        }
+
+        try {
+          const result = await createApplication(application)
+          if (result.insertedId) {
+            toast.add({
+              title: "Application submitted",
+              description: "Your application has been submitted successfully.",
+              type: "success",
+            })
+            router.push("/browse-jobs")
+          } else {
+            toast.add({
+              title: "Application failed",
+              description: "Failed to submit application. Please try again.",
+              type: "error",
+            })
+          }
+        } catch {
           toast.add({
             title: "Application failed",
-            description: "Failed to submit application. Please try again.",
+            description: "Something went wrong. Please try again.",
             type: "error",
           })
         }
-      } catch {
-        toast.add({
-          title: "Application failed",
-          description: "Something went wrong. Please try again.",
-          type: "error",
-        })
       }
     } else {
       toast.add({
