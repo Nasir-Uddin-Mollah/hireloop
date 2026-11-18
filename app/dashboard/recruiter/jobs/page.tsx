@@ -1,10 +1,11 @@
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Eye, Pencil, MoreHorizontal, Plus, Users } from "lucide-react"
+import { Eye, Pencil, FileText, MoreHorizontal, Plus, Users } from "lucide-react"
 import type { JobFormData } from "@/lib/types/jobs"
 import { getJobs } from "@/lib/api/jobs"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
+import { getSession } from "@/lib/core/server"
 
 type JobStatus = "active" | "expired"
 
@@ -50,7 +51,9 @@ const headingClass =
 const cellClass = "px-3 py-3.5"
 
 export default async function RecruiterJobsPage() {
-  const jobs: JobRow[] = await getJobs()
+  const session = await getSession()
+
+  const jobs: JobRow[] = await getJobs(`recruiterId=${session?.user.id}`)
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8">
@@ -205,6 +208,13 @@ export default async function RecruiterJobsPage() {
                   {/* Actions */}
                   <td className={cn(cellClass, "px-5")}>
                     <div className="flex items-center gap-1">
+                      <Link
+                        href={`/dashboard/recruiter/jobs/${job._id}/applications`}
+                        aria-label={`View applications for ${job.title}`}
+                        className={iconButtonClass}
+                      >
+                        <FileText aria-hidden className="size-4" />
+                      </Link>
                       <button
                         type="button"
                         aria-label={`View ${job.title}`}

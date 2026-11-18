@@ -25,6 +25,7 @@ import {
   type JobType,
 } from "@/lib/types/jobs"
 import { useRouter } from "next/navigation"
+import { useSession } from "@/lib/auth-client"
 export type { JobFormData, JobType }
 
 const inputClass =
@@ -37,6 +38,8 @@ const sectionBulletClass =
   "flex size-7 items-center justify-center rounded-lg bg-[#5C53FE]/15 text-sm font-semibold text-[#8B85FF]"
 
 export default function NewJobPage() {
+  const { data: session } = useSession();
+
   const router = useRouter()
   const [isRemote, setIsRemote] = useState(false)
   const [pending, setPending] = useState(false)
@@ -49,6 +52,7 @@ export default function NewJobPage() {
     const jobData: JobFormData = {
       ...(raw as unknown as Omit<JobFormData, "isRemote">),
       isRemote: raw.isRemote === "on",
+      recruiterId: session?.user.id ?? "",
       applicants: 0,
       status: "active",
     }

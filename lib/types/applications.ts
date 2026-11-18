@@ -15,6 +15,9 @@ export const STATUS_META: Record<
   offered: { label: "Offered", color: "#22C55E" },
 }
 
+/** All selectable statuses, in pipeline order. */
+export const APPLICATION_STATUSES = Object.keys(STATUS_META) as ApplicationStatus[]
+
 export type ApplicationFormData = {
   jobId: string
   userId: string
