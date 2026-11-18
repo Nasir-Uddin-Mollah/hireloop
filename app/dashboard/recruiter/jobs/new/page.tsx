@@ -16,7 +16,7 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/toast"
 import { Briefcase, Calendar, MapPin } from "lucide-react"
-import { createJob } from "@/lib/actions/jobs"
+import { createJob } from "@/lib/api/jobs"
 import {
   JOB_CATEGORIES,
   JOB_TYPES,
