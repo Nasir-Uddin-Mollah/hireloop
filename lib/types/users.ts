@@ -20,6 +20,7 @@ export const USER_ROLES = Object.keys(ROLE_META) as UserRole[]
 // One row of the User Management table (subset of the better-auth user).
 export type UserRow = {
   id: string
+  _id?: string
   name: string
   email: string
   role: UserRole

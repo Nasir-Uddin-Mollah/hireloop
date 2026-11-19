@@ -2,14 +2,15 @@ import type {
   ApplicationFormData,
   ApplicationRow,
 } from "@/lib/types/applications"
+import { authFetch, protectedMutation } from "@/lib/core/server"
+
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
 
-export const getApplications = async (
-  query = ""
-): Promise<ApplicationRow[]> => {
-  const res = await fetch(`${BASE_URL}/applications?${query}`)
-  return res.json()
+export const getApplications = async (query = ""): Promise<ApplicationRow[]> => {
+    const api = `${BASE_URL}/applications?${query}`
+    const res = await authFetch(api)
+    return res.json()
 }
 
 export const getApplicationsCount = async (query = ""): Promise<{ count: number }> => {
@@ -18,12 +19,7 @@ export const getApplicationsCount = async (query = ""): Promise<{ count: number 
 }
 
 export const createApplication = async (data: ApplicationFormData) => {
-  const res = await fetch(`${BASE_URL}/applications`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-  return res.json()
+    const api = `${BASE_URL}/applications`;
+    const res = await protectedMutation(api, "POST", data)
+    return res.json()
 }

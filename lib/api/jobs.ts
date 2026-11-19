@@ -1,4 +1,7 @@
+'use server'
+
 import type { JobFormData, JobRow } from "@/lib/types/jobs"
+import { protectedMutation } from "../core/server"
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
 
@@ -13,14 +16,9 @@ export const getJobById = async (jobId: string): Promise<JobRow> => {
 }
 
 export const createJob = async (data: JobFormData) => {
-  const res = await fetch(`${BASE_URL}/jobs`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-  return res.json()
+    const api = `${BASE_URL}/jobs`;
+    const res = await protectedMutation(api, "POST", data)
+    return res.json()
 }
 
 export const deleteJob = async (jobId: string) => {
